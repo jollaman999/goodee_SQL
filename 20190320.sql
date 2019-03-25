@@ -1150,3 +1150,50 @@ select s.name, m.name, p.name from student s join major m join professor p on s.
 select s.name, profno, p.name from student s, professor p where s.profno = p.no and s.grade = 2;
 
 select s.name, profno, p.name from student s join professor p on s.profno = p.no where s.grade = 2;
+
+-- 문제
+-- 1. emp, p_grade 테이블에서 사원이름, 직급, 현재 연봉,
+-- 해당 직급의 연봉 하한, 연봉 상한을 출력하기,
+-- 현재 연봉은 (급여 * 12 + bonus) * 10000 으로 한다.
+-- 보너스가 없으면 0으로 처리 하기
+select ename, job, (salary * 12 + ifnull(bonus, 0)) * 10000 as "현재 연봉", s_pay, e_pay
+from emp e join p_grade p on e.job = p.position;
+
+
+-- 1. 장성태 학생의 학번, 이름, 전공1번호, 전공학과이름,학과위치(build) 출력하기
+select studno, s.name, major1, m.name, build from student s join major m on s.major1 = m.code where s.name="장성태";
+select studno, s.name, major1, m.name, build from student s, major m where s.major1 = m.code and s.name="장성태";
+
+-- 2. 몸무게 80 kg 이상인 학생의 학번, 이름,체중, 학과이름, 학과위치 출력
+select studno, s.name, weight, m.name, m.build from student s, major m where s.major1 = m.code and s.weight >= 80;
+
+-- 3. 4학년 학생의 이름 학과번호, 학과이름 출력하기
+select s.name, studno, m.name from student s, major m where s.major1 = m.code and s.grade = 4;
+
+-- 4. 성이 김씨인 학생들의 이름, 학과이름 학과위치 출력하기
+select s.name, m.name 학과이름, m.build 학과위치 from student s, major m where s.major1 = m.code and s.name like "김%";
+
+-- 5. 학번과 학생이름, 소속학과이름을 학생 이름순으로 정렬하여 출력
+select studno, s.name, m.name from student s, major m where s.major1 = m.code order by s.name;
+
+-- 6. 교수별로 교수 이름과 지도 학생 수를 출력하기
+select p.name, count(*) "지도 학생 수" from professor p, student s where p.no = s.profno group by p.name;
+
+-- 7. 각 학과에 소속된 학과이름, 학생이름 ,교수이름을 출력
+select m.name, s.name, p.name from major m, student s, professor p where m.code = s.major1 and m.code = p.deptno;
+
+-- 8. 학생의 생일을 birthday를 기준으로 학생의 생일별 인원수를  다음 결과가 나오도록 sql 구문 작성하기
+select count(*) 합계,
+count(if(month(birthday) = 1,".",null)) "1월",
+count(if(month(birthday) = 2,".",null)) "2월",
+count(if(month(birthday) = 3,".",null)) "3월",
+count(if(month(birthday) = 4,".",null)) "4월",
+count(if(month(birthday) = 5,".",null)) "5월",
+count(if(month(birthday) = 6,".",null)) "6월",
+count(if(month(birthday) = 7,".",null)) "7월",
+count(if(month(birthday) = 8,".",null)) "8월",
+count(if(month(birthday) = 9,".",null)) "9월",
+count(if(month(birthday) = 10,".",null)) "10월",
+count(if(month(birthday) = 11,".",null)) "11월",
+count(if(month(birthday) = 12,".",null)) "12월"
+from student;
