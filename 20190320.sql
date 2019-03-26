@@ -1179,8 +1179,19 @@ select studno, s.name, m.name from student s, major m where s.major1 = m.code or
 -- 6. 교수별로 교수 이름과 지도 학생 수를 출력하기
 select p.name, count(*) "지도 학생 수" from professor p, student s where p.no = s.profno group by p.name;
 
+-- 교수이름과 지도학생의 이름 출력하기
+select p.name, s.name from professor p, student s where p.no = s.profno order by p.name;
+
 -- 7. 각 학과에 소속된 학과이름, 학생이름 ,교수이름을 출력
 select m.name, s.name, p.name from major m, student s, professor p where m.code = s.major1 and m.code = p.deptno;
+
+-- union 연산자
+select m.name, concat(s.name, ' 학생') from major m, student s
+where m.code = s.major1
+union
+select m.name, concat(p.name, ' 교수') from major m, professor p
+where m.code = p.deptno
+order by 1;
 
 -- 8. 학생의 생일을 birthday를 기준으로 학생의 생일별 인원수를  다음 결과가 나오도록 sql 구문 작성하기
 select count(*) 합계,
