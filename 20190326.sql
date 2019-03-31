@@ -610,7 +610,8 @@ references dept(deptno);
 
 select * from dept;
 
-select distinct delptno from emp;
+select distinct deptno from emp;
+
 insert into emp (empno, ename, job, salary, deptno)
 values (9000, "홍길동", "임시직", 100, 50);
 
@@ -1052,3 +1053,18 @@ select p.no, p.name, p.deptno, m.name, a.avg_salary, a.avg_bonus
 from professor p, major m,
 (select deptno, avg(salary) avg_salary, avg(ifnull(bonus, 0)) avg_bonus from professor group by deptno) a
 where p.deptno = m.code and p.deptno = a.deptno;
+
+
+-- 학생의 학번, 이름, 키, 몸무게, 자기학년의 최대키, 평균키, 최대 몸무게, 평균 몸무게 출력
+select studno, name, height, weight,
+ (select max(s2.height) from student s2 where s1.grade = s2.grade) max_height,
+ (select avg(s2.height) from student s2 where s1.grade = s2.grade) avg_height,
+ (select max(s2.weight) from student s2 where s1.grade = s2.grade) max_weight,
+ (select avg(s2.weight) from student s2 where s1.grade = s2.grade) avg_weight
+from student s1;
+
+select studno, name, height, weight, a.max_height, a.avg_height, a.max_weight, a.avg_weight
+from student s,
+ (select grade, max(height) max_height, avg(height) avg_height, max(weight) max_weight, avg(weight) avg_weight
+ from student group by grade) a
+where s.grade = a.grade;
